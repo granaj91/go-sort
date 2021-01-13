@@ -5,7 +5,9 @@ To challenge myself, I decided to complete this challenge using a new language. 
 This project requires the installation of [Go](https://golang.org) and the goquery package (used for web scraping).
 
 goquery package installation:
-`$ go get github.com/PuerkitoBio/goquery`
+```
+$ go get github.com/PuerkitoBio/goquery
+```
 
 # Getting Started
 ### Step 1. Clone the code into a fresh folder
@@ -15,7 +17,11 @@ $ cd go-sort
 ```
 
 ### Step 2. Run the program
-`$ go run sort.go`
+```
+$ go run sort.go
+```
 
 ### Step 3. Run tests
-`$ go test`
+```
+$ go test
+```
