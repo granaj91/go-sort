@@ -1,23 +1,33 @@
 package main
+
 import (
 	"fmt"
+	"log"
+	"net/http"
+	"strings"
 	"time"
+
+	"github.com/PuerkitoBio/goquery"
 )
 
-func main(){
-	var a = []int{4,9,5,3,2}
-	bubble_sort(a)
-	insertion_sort(a)
-	selection_sort(a)
-	merge_sort(a)
-	heap_sort(a)
+func main() {
+	eventNames, err := getHackathonEvents("https://mlh.io/seasons/2021/events")
+	if err != nil {
+		log.Println(err)
+	}
+
+	bubbleSort(eventNames)
+	insertionSort(eventNames)
+	selectionSort(eventNames)
+	mergeSort(eventNames)
+	heapSort(eventNames)
 }
 
-func bubble_sort(arr []int){
+func bubbleSort(arr []string) []string {
 	start := time.Now()
-	for i := len(arr) - 1; i >= 1; i--{
-		for j := 0; j <= i - 1; j++{
-			if arr[j] > arr[j+1]{
+	for i := len(arr) - 1; i >= 1; i-- {
+		for j := 0; j <= i-1; j++ {
+			if strings.ToLower(arr[j]) > strings.ToLower(arr[j+1]) {
 				var temp = arr[j]
 				arr[j] = arr[j+1]
 				arr[j+1] = temp
@@ -25,32 +35,34 @@ func bubble_sort(arr []int){
 		}
 	}
 	elapsed := time.Since(start)
-	fmt.Println("Bubble Sort: ", arr)
-	fmt.Println("Execution time: ", elapsed)
+	fmt.Println("Sorted List: ")
+	printList(arr)
+	fmt.Println("Bubble sort execution time: ", elapsed)
+	return arr
 }
 
-func insertion_sort(arr []int){
+func insertionSort(arr []string) []string {
 	start := time.Now()
-	for i := 1; i < len(arr); i++{
+	for i := 1; i < len(arr); i++ {
 		temp := arr[i]
 		j := i - 1
-		for j >= 0 && arr[j] > temp{
+		for j >= 0 && strings.ToLower(arr[j]) > strings.ToLower(temp) {
 			arr[j+1] = arr[j]
 			j--
 		}
 		arr[j+1] = temp
 	}
 	elapsed := time.Since(start)
-	fmt.Println("Insertion Sort: ", arr)
-	fmt.Println("Execution time: ", elapsed)
+	fmt.Println("Insertion sort execution time: ", elapsed)
+	return arr
 }
 
-func selection_sort(arr []int){
+func selectionSort(arr []string) []string {
 	start := time.Now()
-	for i := len(arr) - 1; i >= 1; i--{
+	for i := len(arr) - 1; i >= 1; i-- {
 		t := 0
-		for j := 1; j <= i; j++{
-			if arr[j] > arr[t]{
+		for j := 1; j <= i; j++ {
+			if strings.ToLower(arr[j]) > strings.ToLower(arr[t]) {
 				t = j
 			}
 		}
@@ -59,42 +71,42 @@ func selection_sort(arr []int){
 		arr[i] = temp
 	}
 	elapsed := time.Since(start)
-	fmt.Println("Selection Sort: ", arr)
-	fmt.Println("Execution time: ", elapsed)
+	fmt.Println("Selection sort execution time: ", elapsed)
+	return arr
 }
 
-func merge_sort(arr []int){
+func mergeSort(arr []string) []string {
 	start := time.Now()
-	newArr := merge_sort_aux(arr)
+	mergeSortAux(arr)
 	elapsed := time.Since(start)
-	fmt.Println("Merge Sort: ", newArr)
-	fmt.Println("Execution time: ", elapsed)
+	fmt.Println("Merge sort execution time: ", elapsed)
+	return arr
 }
 
-func merge_sort_aux(arr []int) []int{
+func mergeSortAux(arr []string) []string {
 	n := len(arr)
 	if n <= 1 {
 		return arr
 	}
-	leftArr := merge_sort_aux(arr[:n/2])
-	rightArr := merge_sort_aux(arr[n/2:])
+	leftArr := mergeSortAux(arr[:n/2])
+	rightArr := mergeSortAux(arr[n/2:])
 	return merge(leftArr, rightArr)
 }
 
-func merge(left, right []int) []int{
+func merge(left, right []string) []string {
 	ln := len(left)
 	rn := len(right)
 	n := ln + rn
-	sorted :=make([]int, n)
+	sorted := make([]string, n)
 	i := 0
 	j := 0
 	k := 0
 
 	for i < ln && j < rn {
-		if left[i] < right[j]{
+		if strings.ToLower(left[i]) < strings.ToLower(right[j]) {
 			sorted[k] = left[i]
 			i++
-		}else {
+		} else {
 			sorted[k] = right[j]
 			j++
 		}
@@ -114,31 +126,30 @@ func merge(left, right []int) []int{
 	return sorted
 }
 
-func heap_sort(arr []int){
+func heapSort(arr []string) []string {
 	start := time.Now()
 	size := len(arr)
-	build_max_heap(arr)
+	buildMaxHeap(arr)
 	for i := len(arr) - 1; i > 1; i-- {
 		temp := arr[i]
 		arr[i] = arr[1]
 		arr[1] = temp
 		size--
-		max_heapify(arr[:size], 1)
+		maxHeapify(arr[:size], 1)
 	}
 	elapsed := time.Since(start)
-
-	fmt.Println("Heap Sort: ", arr)
-	fmt.Println("Execution time: ", elapsed)
+	fmt.Println("Heap sort execution time: ", elapsed)
+	return arr
 }
 
-func build_max_heap(arr []int){
-	for i := len(arr)/2; i > 0; i-- {
-		max_heapify(arr, i)
+func buildMaxHeap(arr []string) {
+	for i := len(arr) / 2; i > 0; i-- {
+		maxHeapify(arr, i)
 	}
 }
 
 func parent(index int) int {
-	return index/2
+	return index / 2
 }
 
 func left(index int) int {
@@ -149,19 +160,19 @@ func right(index int) int {
 	return 2*index + 1
 }
 
-func max_heapify(arr []int, i int) []int {
+func maxHeapify(arr []string, i int) []string {
 	n := len(arr) - 1
 	l := left(i)
 	r := right(i)
 	largest := 0
 
-	if l <= n && arr[l] > arr[i]{
+	if l <= n && strings.ToLower(arr[l]) > strings.ToLower(arr[i]) {
 		largest = l
-	}else{
+	} else {
 		largest = i
 	}
 
-	if r <= n && arr[r] > arr[largest]{
+	if r <= n && strings.ToLower(arr[r]) > strings.ToLower(arr[largest]) {
 		largest = r
 	}
 
@@ -169,8 +180,33 @@ func max_heapify(arr []int, i int) []int {
 		temp := arr[i]
 		arr[i] = arr[largest]
 		arr[largest] = temp
-		max_heapify(arr, largest)
+		maxHeapify(arr, largest)
 	}
 
 	return arr
+}
+
+func getHackathonEvents(url string) ([]string, error) {
+	resp, err := http.Get(url)
+	if err != nil {
+		return nil, err
+	}
+
+	// Convert HTML into goquery document
+	doc, err := goquery.NewDocumentFromReader(resp.Body)
+	if err != nil {
+		return nil, err
+	}
+
+	var events []string
+	doc.Find(".event-name").Each(func(i int, s *goquery.Selection) {
+		events = append(events, s.Text())
+	})
+	return events, nil
+}
+
+func printList(list []string) {
+	for i := 0; i < len(list); i++ {
+		fmt.Println(list[i])
+	}
 }
