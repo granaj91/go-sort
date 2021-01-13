@@ -10,6 +10,7 @@ func main(){
 	insertion_sort(a)
 	selection_sort(a)
 	merge_sort(a)
+	heap_sort(a)
 }
 
 func bubble_sort(arr []int){
@@ -111,4 +112,65 @@ func merge(left, right []int) []int{
 		k++
 	}
 	return sorted
+}
+
+func heap_sort(arr []int){
+	start := time.Now()
+	size := len(arr)
+	build_max_heap(arr)
+	for i := len(arr) - 1; i > 1; i-- {
+		temp := arr[i]
+		arr[i] = arr[1]
+		arr[1] = temp
+		size--
+		max_heapify(arr[:size], 1)
+	}
+	elapsed := time.Since(start)
+
+	fmt.Println("Heap Sort: ", arr)
+	fmt.Println("Execution time: ", elapsed)
+}
+
+func build_max_heap(arr []int){
+	for i := len(arr)/2; i > 0; i-- {
+		max_heapify(arr, i)
+	}
+}
+
+func parent(index int) int {
+	return index/2
+}
+
+func left(index int) int {
+	return 2 * index
+}
+
+func right(index int) int {
+	return 2*index + 1
+}
+
+func max_heapify(arr []int, i int) []int {
+	n := len(arr) - 1
+	l := left(i)
+	r := right(i)
+	largest := 0
+
+	if l <= n && arr[l] > arr[i]{
+		largest = l
+	}else{
+		largest = i
+	}
+
+	if r <= n && arr[r] > arr[largest]{
+		largest = r
+	}
+
+	if largest != i {
+		temp := arr[i]
+		arr[i] = arr[largest]
+		arr[largest] = temp
+		max_heapify(arr, largest)
+	}
+
+	return arr
 }
