@@ -12,6 +12,7 @@ import (
 
 func main() {
 	eventNames, err := getHackathonEvents("https://mlh.io/seasons/2021/events")
+
 	if err != nil {
 		log.Println(err)
 	}
@@ -20,10 +21,20 @@ func main() {
 	insertionSort(eventNames)
 	selectionSort(eventNames)
 	mergeSort(eventNames)
-	heapSort(eventNames)
+	sorted := heapSort(eventNames)
+	fmt.Println("\nSorted List: ")
+	printList(sorted)
 }
 
-func bubbleSort(arr []string) []string {
+func deepCopy(original, copy []string) {
+	for i, v := range original {
+		copy[i] = v
+	}
+}
+
+func bubbleSort(events []string) []string {
+	arr := make([]string, len(events))
+	deepCopy(events, arr)
 	start := time.Now()
 	for i := len(arr) - 1; i >= 1; i-- {
 		for j := 0; j <= i-1; j++ {
@@ -35,13 +46,13 @@ func bubbleSort(arr []string) []string {
 		}
 	}
 	elapsed := time.Since(start)
-	fmt.Println("Sorted List: ")
-	printList(arr)
 	fmt.Println("Bubble sort execution time: ", elapsed)
 	return arr
 }
 
-func insertionSort(arr []string) []string {
+func insertionSort(events []string) []string {
+	arr := make([]string, len(events))
+	deepCopy(events, arr)
 	start := time.Now()
 	for i := 1; i < len(arr); i++ {
 		temp := arr[i]
@@ -57,7 +68,9 @@ func insertionSort(arr []string) []string {
 	return arr
 }
 
-func selectionSort(arr []string) []string {
+func selectionSort(events []string) []string {
+	arr := make([]string, len(events))
+	deepCopy(events, arr)
 	start := time.Now()
 	for i := len(arr) - 1; i >= 1; i-- {
 		t := 0
@@ -75,12 +88,14 @@ func selectionSort(arr []string) []string {
 	return arr
 }
 
-func mergeSort(arr []string) []string {
+func mergeSort(events []string) []string {
+	arr := make([]string, len(events))
+	deepCopy(events, arr)
 	start := time.Now()
-	mergeSortAux(arr)
+	newArr := mergeSortAux(arr)
 	elapsed := time.Since(start)
 	fmt.Println("Merge sort execution time: ", elapsed)
-	return arr
+	return newArr
 }
 
 func mergeSortAux(arr []string) []string {
@@ -126,16 +141,18 @@ func merge(left, right []string) []string {
 	return sorted
 }
 
-func heapSort(arr []string) []string {
+func heapSort(events []string) []string {
+	arr := make([]string, len(events))
+	deepCopy(events, arr)
 	start := time.Now()
 	size := len(arr)
 	buildMaxHeap(arr)
-	for i := len(arr) - 1; i > 1; i-- {
+	for i := len(arr) - 1; i >= 1; i-- {
 		temp := arr[i]
-		arr[i] = arr[1]
-		arr[1] = temp
+		arr[i] = arr[0]
+		arr[0] = temp
 		size--
-		maxHeapify(arr[:size], 1)
+		maxHeapify(arr[:size], 0)
 	}
 	elapsed := time.Since(start)
 	fmt.Println("Heap sort execution time: ", elapsed)

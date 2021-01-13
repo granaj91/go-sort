@@ -23,5 +23,5 @@ $ go run sort.go
 
 ### Step 3. Run tests
 ```
-$ go test
+$ go test -v
 ```
