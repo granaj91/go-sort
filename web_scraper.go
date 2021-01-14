@@ -18,6 +18,7 @@ func getHackathonEvents(url string) ([]string, error) {
 		return nil, err
 	}
 
+	// Find all classes named event-name and add text to list
 	var events []string
 	doc.Find(".event-name").Each(func(i int, s *goquery.Selection) {
 		events = append(events, s.Text())
