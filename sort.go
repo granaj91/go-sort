@@ -3,11 +3,8 @@ package main
 import (
 	"fmt"
 	"log"
-	"net/http"
 	"strings"
 	"time"
-
-	"github.com/PuerkitoBio/goquery"
 )
 
 func main() {
@@ -201,25 +198,6 @@ func maxHeapify(arr []string, i int) []string {
 	}
 
 	return arr
-}
-
-func getHackathonEvents(url string) ([]string, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-
-	// Convert HTML into goquery document
-	doc, err := goquery.NewDocumentFromReader(resp.Body)
-	if err != nil {
-		return nil, err
-	}
-
-	var events []string
-	doc.Find(".event-name").Each(func(i int, s *goquery.Selection) {
-		events = append(events, s.Text())
-	})
-	return events, nil
 }
 
 func printList(list []string) {
