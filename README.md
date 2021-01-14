@@ -1,5 +1,5 @@
 # Local Hack Day: Build - Write Code to Sort a List
-To challenge myself, I decided to complete this challenge using a new language. To make it a bit more interesting, I implemented a few of the most common sorting algorithms and tracked the execution time of each.
+To challenge myself, I decided to complete this challenge using a new language. To make it a bit more interesting, I implemented a few of the most common sorting algorithms and tracked the execution time of each. This implementation sorts the hackathon event names scraped from https://mlh.io/seasons/2021/events using goquery.
 
 # Installation
 This project requires the installation of [Go](https://golang.org) and the goquery package (used for web scraping).
